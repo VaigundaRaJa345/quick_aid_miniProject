@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block title %}Edit Emergency Details | QUICK AID{% endblock %}
+
+{% block content %}
+    <h2>Edit Emergency Details</h2>
+
+    <form action="{{ url_for('edit_details', uid=account.uid) }}" method="POST">
+        <label for="name">Full Name:</label>
+        <input type="text" id="name" name="name" value="{{ account.name }}" required>
+
+        <label for="emergency_contact">Emergency Contact Number:</label>
+        <input type="text" id="emergency_contact" name="emergency_contact" value="{{ account.emergency_contact }}" required>
+
+        <label for="vehicle_number">Vehicle Number:</label>
+        <input type="text" id="vehicle_number" name="vehicle_number" value="{{ account.vehicle_number }}" required>
+
+        <label for="blood_group">Blood Group (Optional):</label>
+        <input type="text" id="blood_group" name="blood_group" value="{{ account.blood_group }}">
+
+        <label for="allergies_select">Do you have allergies?</label>
+        <select id="allergies_select" name="allergies">
+            <option value="No" {% if account.allergies == "No" %}selected{% endif %}>No</option>
+            <option value="Yes" {% if account.allergies != "No" %}selected{% endif %}>Yes</option>
+        </select>
+        <input type="text" id="allergies_input" name="allergy_type" value="{{ account.allergies if account.allergies != 'No' else '' }}">
+
+        <label for="disabled_select">Are you differently-abled?</label>
+        <select id="disabled_select" name="differently_abled">
+            <option value="No" {% if account.differently_abled == "No" %}selected{% endif %}>No</option>
+            <option value="Yes" {% if account.differently_abled != "No" %}selected{% endif %}>Yes</option>
+        </select>
+        <input type="text" id="disabled_input" name="disability_type" value="{{ account.differently_abled if account.differently_abled != 'No' else '' }}">
+
+        <label for="alternate_contact">Alternate Emergency Contact (Optional):</label>
+        <input type="text" id="alternate_contact" name="alternate_contact" value="{{ account.alternate_contact }}">
+
+        <button type="submit">Update Details</button>
+        <a href="{{ url_for('dashboard') }}"><button type="button">Cancel</button></a>
+    </form>
+{% endblock %}

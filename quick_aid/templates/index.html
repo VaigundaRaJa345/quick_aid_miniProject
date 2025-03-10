@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block title %}Home - QUICK AID{% endblock %}
+
+{% block content %}
+    <h1>Welcome to QUICK AID</h1>
+    <p>Your quick emergency aid solution.</p>
+    {% if not current_user.is_authenticated %}
+        <a href="{{ url_for('login') }}" class="cta-button">Get Started</a>
+    {% endif %}
+{% endblock %}
