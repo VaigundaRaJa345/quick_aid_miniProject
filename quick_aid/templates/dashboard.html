@@ -17,6 +17,8 @@
             <p>Alternate Contact: {{ detail.alternate_contact }}</p>
             <p>UID: {{ detail.uid }}</p>
             <img src="{{ detail.aztec_code_path }}" alt="Aztec Code">
+            <br>
+            <a href="{{ detail.aztec_code_path }}" download="Aztec_QR_{{ detail.uid }}.png" class="cta-button">Download QR Code</a>
         </div>
     {% endfor %}
 {% endblock %}
