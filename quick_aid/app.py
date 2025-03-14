@@ -9,8 +9,8 @@ import random
 import string
 import segno  # Aztec Code generation
 
-# ✅ Fix Flask instance typo
-app = Flask(__name__)  # Corrected typo
+# ✅ Correct Flask instance
+app = Flask(_name_)  
 app.config.from_object(Config)
 
 # ✅ Initialize extensions
@@ -19,8 +19,8 @@ bcrypt.init_app(app)
 login_manager.init_app(app)
 migrate = Migrate(app, db)
 
-# ✅ Flask-Login setup
-login_manager.login_view = 'login'
+# ✅ Fix login route reference
+login_manager.login_view = 'auth.login'  # If login is in auth.py blueprint
 login_manager.login_message_category = 'info'
 
 @login_manager.user_loader
@@ -56,19 +56,19 @@ def get_aztec_code(uid):
         return send_from_directory("static/aztec_codes", f"{uid}.png")
     else:
         flash("Aztec code not found!", "danger")
-        return redirect(url_for('dashboard'))
+        return redirect(url_for('home'))  # ✅ Ensure this route exists
 
 @app.route("/logout")
 @login_required
 def logout():
     logout_user()
     flash("Logged out successfully!", "info")
-    return redirect(url_for('login'))
+    return redirect(url_for('auth.login'))  # ✅ Ensure this matches your actual login route
 
 with app.app_context():
     db.create_all()
 
 # ✅ Fix port issue for Render
-if __name__ == "_main_":
+if _name_ == "_main":  # ✅ Corrected "main_"
     port = int(os.environ.get("PORT", 5000))  # Use Render's port or default to 5000
     app.run(host="0.0.0.0", port=port)
