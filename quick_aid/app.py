@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect, url_for, flash, request
+from flask import Flask, render_template, redirect, url_for, flash, request, send_from_directory
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 from flask_migrate import Migrate
 from quick_aid.extensions import db, bcrypt, login_manager  # Import extensions
@@ -6,12 +6,12 @@ from quick_aid.models import User, Details
 from quick_aid.config import Config
 import random
 import string
-import segno  # QR code generation
+import segno  # Aztec Code generation
 import os
 from datetime import datetime
 
 # ✅ Initialize Flask app
-app = Flask(__name__)
+app = Flask(_name_)
 app.config.from_object(Config)
 
 # ✅ Initialize Flask extensions
@@ -23,6 +23,7 @@ migrate = Migrate(app, db)
 # ✅ Flask-Login settings
 login_manager.login_view = 'login'
 login_manager.login_message_category = 'info'
+
 # ✅ Load user function for Flask-Login
 @login_manager.user_loader
 def load_user(user_id):
@@ -37,26 +38,25 @@ def inject_user():
     return dict(current_user=current_user)
 
 def generate_uid():
-    """Generates a
- unique 8-character UID."""
+    """Generates a unique 8-character UID."""
     return ''.join(random.choices(string.ascii_uppercase + string.digits, k=8))
 
 def generate_aztec_code(uid):
     """Generates an Aztec code for the given UID and saves it as an image."""
-    aztec = segno.make_qr(f"https://quick-aid-miniproject-1.onrender.com{uid}")  # Replace with actual URL
-    aztec_code_path = f"static/aztec_codes/{uid}.png"
-    
-    # Ensure directory exists
-    os.makedirs(os.path.dirname(aztec_code_path), exist_ok=True)
+    url = f"https://quick-aid-miniproject-1.onrender.com/details/{uid}"  # Update with actual details URL
+    aztec = segno.make(url)  # Correct function for Aztec code
 
-    # Save the Aztec code image
-    aztec.save(aztec_code_path, scale=5)
+    aztec_dir = "static/aztec_codes"
+    os.makedirs(aztec_dir, exist_ok=True)  # Ensure the directory exists
+
+    aztec_code_path = os.path.join(aztec_dir, f"{uid}.png")
+    aztec.save(aztec_code_path, scale=5)  # Save the Aztec code image
+
     return aztec_code_path
 
 @app.route("/")
 def home():
     return render_template("index.html")
-
 
 @app.route("/register", methods=['GET', 'POST'])
 def register():
@@ -105,7 +105,6 @@ def login():
 
     return render_template("login.html")
 
-
 @app.route("/dashboard")
 @login_required
 def dashboard():
@@ -135,7 +134,7 @@ def add_details():
         # Generate Aztec code
         aztec_code_path = generate_aztec_code(uid)
 
-        # Save Aztec code path
+        # Save Aztec code path in the database
         details.aztec_code_path = aztec_code_path
         db.session.commit()
 
@@ -143,6 +142,16 @@ def add_details():
         return redirect(url_for('dashboard'))
 
     return render_template("add_details.html")
+
+@app.route("/aztec_code/<uid>")
+def get_aztec_code(uid):
+    """Serves the Aztec code image for a given UID."""
+    aztec_code_path = f"static/aztec_codes/{uid}.png"
+    if os.path.exists(aztec_code_path):
+        return send_from_directory("static/aztec_codes", f"{uid}.png")
+    else:
+        flash("Aztec code not found!", "danger")
+        return redirect(url_for('dashboard'))
 
 @app.route("/logout")
 @login_required
@@ -154,6 +163,5 @@ def logout():
 with app.app_context():
     db.create_all()
 
-
-if __name__ == "__main__":
+if _name_ == "_main_":
     app.run(debug=True)
