@@ -10,7 +10,7 @@ import string
 import segno  # Aztec Code generation
 
 # ✅ Fix Flask instance typo
-app = Flask(_name_)  # Corrected typo
+app = Flask(__name__)  # Corrected typo
 app.config.from_object(Config)
 
 # ✅ Initialize extensions
@@ -69,6 +69,6 @@ with app.app_context():
     db.create_all()
 
 # ✅ Fix port issue for Render
-if _name_ == "_main_":
+if __name__ == "_main_":
     port = int(os.environ.get("PORT", 5000))  # Use Render's port or default to 5000
     app.run(host="0.0.0.0", port=port)
