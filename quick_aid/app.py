@@ -1,9 +1,9 @@
 from flask import Flask, render_template, redirect, url_for, flash, request
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 from flask_migrate import Migrate
-from extensions import db, bcrypt, login_manager  # Import extensions
-from models import User, Details
-from config import Config
+from quick_aid.extensions import db, bcrypt, login_manager  # Import extensions
+from quick_aid.models import User, Details
+from quick_aid.config import Config
 import random
 import string
 import segno  # QR code generation
