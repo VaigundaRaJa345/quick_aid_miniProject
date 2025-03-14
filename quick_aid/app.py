@@ -10,7 +10,7 @@ import string
 import segno  # Aztec Code generation
 
 # ✅ Correct Flask instance
-app = Flask(_name_)  
+app = Flask(__name__)  
 app.config.from_object(Config)
 
 # ✅ Initialize extensions
