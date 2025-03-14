@@ -16,7 +16,9 @@
             <p>Differently-abled: {{ detail.differently_abled }}</p>
             <p>Alternate Contact: {{ detail.alternate_contact }}</p>
             <p>UID: {{ detail.uid }}</p>
-            <img src="{{ detail.aztec_code_path }}" alt="Aztec Code">
+            <img src="{{ url_for('static', filename='aztec_codes/' + detail.uid + '.png') }}" 
+                 alt="Aztec Code" width="150" height="150"
+                 onerror="this.onerror=null; this.src='{{ url_for('static', filename='default.png') }}';">
             <br>
             <a href="{{ detail.aztec_code_path }}" download="Aztec_QR_{{ detail.uid }}.png" class="cta-button">Download QR Code</a>
         </div>
