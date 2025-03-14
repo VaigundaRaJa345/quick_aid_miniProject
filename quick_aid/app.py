@@ -111,6 +111,7 @@ def login():
 def dashboard():
     details = Details.query.filter_by(user_id=current_user.id).all()
     return render_template("dashboard.html", details=details)
+    print(details)
 
 @app.route("/add_details", methods=['GET', 'POST'])
 @login_required
