@@ -43,7 +43,7 @@ def generate_uid():
 
 def generate_aztec_code(uid):
     """Generates an Aztec code for the given UID and saves it as an image."""
-    aztec = segno.make_qr(f"https://yourwebsite.com/details/{uid}")  # Replace with actual URL
+    aztec = segno.make_qr(f"https://quick-aid-miniproject-1.onrender.com{uid}")  # Replace with actual URL
     aztec_code_path = f"static/aztec_codes/{uid}.png"
     
     # Ensure directory exists
