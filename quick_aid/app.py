@@ -69,6 +69,6 @@ with app.app_context():
     db.create_all()
 
 # ✅ Fix port issue for Render
-if __name__ == "_main_":  # ✅ Corrected "main_"
+if __name__ == "__main__":  # ✅ Corrected "main_"
     port = int(os.environ.get("PORT", 5000))  # Use Render's port or default to 5000
     app.run(host="0.0.0.0", port=port)
